@@ -26,6 +26,8 @@ description: |-
 - **destroy_data** (String, Optional) Valid JSON object to pass during to destroy requests.
 - **destroy_method** (String, Optional) Defaults to `destroy_method` set on the provider. Allows per-resource override of `destroy_method` (see `destroy_method` provider config documentation)
 - **destroy_path** (String, Optional) Defaults to `path/{id}`. The API path that represents where to DESTROY (DELETE) objects of this type on the API server. The string `{id}` will be replaced with the terraform ID of the object.
+- **create_ready_key** (String, Optional) The key to observe during resource creation. As long as its value is not equal to `create_ready_value` the resource is considered as pending. Similar to other configurable keys, the value may be in the format of 'field/field/field' to search for data deeper in the returned object.
+- **create_ready_value** (String, Optional) The value at `create_ready_key` indicating that a resource has been successfully created.
 - **force_new** (List of String, Optional) Any changes to these values will result in recreating the resource instead of updating.
 - **id** (String, Optional) The ID of this resource.
 - **id_attribute** (String, Optional) Defaults to `id_attribute` set on the provider. Allows per-resource override of `id_attribute` (see `id_attribute` provider config documentation)
