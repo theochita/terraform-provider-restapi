@@ -100,15 +100,35 @@ func TestAccRestApiObject_Basic(t *testing.T) {
 					resource.TestCheckResourceAttrSet("restapi_object.Bar", "api_data.config"),
 				),
 			},
+			{
+				Config: generateTestResource(
+					"WaitForReady",
+					`{ "id": "5678", "count_down": "4" }`,
+					map[string]interface{}{
+						"create_ready_key":   "count_down",
+						"create_ready_value": "0",
+					},
+				),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckRestapiObjectExists("restapi_object.WaitForReady", "5678", client),
+					resource.TestCheckResourceAttr("restapi_object.WaitForReady", "id", "5678"),
+					resource.TestCheckResourceAttr("restapi_object.WaitForReady", "api_data.count_down", "0"),
+					resource.TestCheckResourceAttr("restapi_object.WaitForReady", "api_response", "{\"count_down\":\"0\",\"id\":\"5678\"}"),
+					resource.TestCheckResourceAttr("restapi_object.WaitForReady", "create_response", "{\"count_down\":\"0\",\"id\":\"5678\"}"),
+				),
+			},
 		},
 	})
 
 	svr.Shutdown()
 }
 
-/* This function generates a terraform JSON configuration from
-   a name, JSON data and a list of params to set by coaxing it
-   all to maps and then serializing to JSON */
+/*
+This function generates a terraform JSON configuration from
+
+	a name, JSON data and a list of params to set by coaxing it
+	all to maps and then serializing to JSON
+*/
 func generateTestResource(name string, data string, params map[string]interface{}) string {
 	strData, _ := json.Marshal(data)
 	config := []string{
